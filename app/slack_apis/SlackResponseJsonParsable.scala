@@ -15,16 +15,17 @@ trait SlackResponseJsonParsable {
           Failure(new RuntimeException("Failure to parse JSON"))
       }
     } else {
-      Json.fromJson[SlackErrorResponse](responseJson)
-      match {
+      Json.fromJson[SlackErrorResponse](responseJson) match {
         case JsSuccess(slackErrorResponse, _) =>
           Failure(
             InvalidParamException(slackErrorResponse.error)
           )
         case _: JsError =>
-          Failure(new RuntimeException(
-            "Slack API response is something wrong..."
-          ))
+          Failure(
+            new RuntimeException(
+              "Slack API response is something wrong..."
+            )
+          )
       }
     }
   }
