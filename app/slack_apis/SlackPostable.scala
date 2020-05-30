@@ -9,10 +9,12 @@ import scala.concurrent.Future
 trait SlackPostable {
   val SLACK_API_BASE_URL = "https://slack.com/api/"
 
-  def post(method: String,
-           slackApiToken: String,
-           requestParamJson: JsValue,
-           ws: WSClient): Future[WSResponse] = {
+  def post(
+      method: String,
+      slackApiToken: String,
+      requestParamJson: JsValue,
+      ws: WSClient
+  ): Future[WSResponse] = {
     val slackRequestUrl: String = s"$SLACK_API_BASE_URL$method"
     ws.url(slackRequestUrl)
       .addHttpHeaders(

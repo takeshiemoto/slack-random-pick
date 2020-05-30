@@ -11,7 +11,8 @@ class SlackMemberPoster(val slackApiToken: String, val ws: WSClient)
     with SlackResponseJsonParsable {
   def postMemberToChannel(
       channelId: String,
-      members: Seq[MemberProfileResponse]): Future[PostedMessageResponse] = {
+      members: Seq[MemberProfileResponse]
+  ): Future[PostedMessageResponse] = {
     val text = members.map(_.toString).mkString("\n\n")
     val requestParamJson = Json.toJson(PostTextRequest(channelId, text))
     post("chat.postMessage", slackApiToken, requestParamJson, ws).flatMap {

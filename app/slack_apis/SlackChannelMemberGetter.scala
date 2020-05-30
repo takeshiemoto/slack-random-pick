@@ -1,20 +1,18 @@
 package slack_apis
 
-import play.api.libs.ws.WSClient
+import play.api.libs.ws._
+
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.Future
 
 class SlackChannelMemberGetter(val slackApiToken: String, val ws: WSClient)
     extends SlackGettable
     with SlackResponseJsonParsable {
-
   def getMemberIdsBy(channelId: String): Future[MembersResponse] = {
-    val requestParamsMap = Map("channel" -> channelId)
-    get("conversations.members", slackApiToken, requestParamsMap, ws).flatMap {
+    val requestParamMap = Map("channel" -> channelId)
+    get("conversations.members", slackApiToken, requestParamMap, ws).flatMap {
       response =>
-        Future.fromTry(
-          parse[MembersResponse](response.json)
-        )
+        Future.fromTry(parse[MembersResponse](response.json))
     }
   }
 
@@ -22,9 +20,7 @@ class SlackChannelMemberGetter(val slackApiToken: String, val ws: WSClient)
     val requestParamMap = Map("user" -> memberId)
     get("users.profile.get", slackApiToken, requestParamMap, ws).flatMap {
       response =>
-        Future.fromTry(
-          parse[MemberProfileResponse](response.json)
-        )
+        Future.fromTry(parse[MemberProfileResponse](response.json))
     }
   }
 }
